@@ -22,11 +22,5 @@ export const MenuItems = [
     url: "/contact",
     cName: "nav-links",
     icon: "fa-solid fa-address-book",
-  },
-  {
-    title: "Signup",
-    url: "/signup",
-    cName: "nav-links nav-links-mobile",
-    icon: "fa-solid fa-user-plus",
-  },
+  }
 ];

@@ -2,45 +2,44 @@ const express = require('express');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const port = 3001;
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: 'nimama',
   database: 'agile_database',
-  port: 3306,
 });
 
-db.connect(err => {
+db.connect((err) => {
   if (err) {
     console.error('Error connecting to the database:', err);
     return;
   }
-  console.log('Connected to the MySQL server.');
+  console.log('Connected to the MySQL database.');
 });
 
-app.post('/api/signup', (req, res) => {
-  const { username, email, password } = req.body;
-  if (!username || !email || !password) {
-    return res.status(400).send('Missing username, email, or password');
-  }
-
-  const sql = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
-  db.query(sql, [username, email, password], (err, result) => {
-    if (err) {
-      console.error('Error inserting data:', err);
-      return res.status(500).send('Server error');
-    }
-    console.log('User registered successfully:', { username, email, password });
-    res.status(200).send('User registered successfully');
-  });
-});
+const salt=5;
+app.post("/signup", (req,res) =>{
+  const sql =" INSERT INTO users (`username`, `email`,`password`) VALUES(?)";
+  bcrypt.hash(req.body.password.toString(),salt,(err,hash)=>{
+    if(err) return res.json("Error")
+    const values =[req.body.username,req.body.email.hash]
+    db.query(sql,[values],(err,result) =>{
+      if(err) console.log(err);
+      else return res.json(result)
+    })
+  
+  })
+})
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

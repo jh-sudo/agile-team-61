@@ -1,9 +1,9 @@
-import { Component, useContext } from "react";
+import React, { Component, useContext } from "react";
 import "./NavbarStyles.css";
 import { MenuItems } from "./MenuItems";
 import { Link } from "react-router-dom";
 import LoginRegister from "./LoginRegister";
-import  AuthContext  from "../AuthContext";
+import AuthContext from "../AuthContext";
 
 class Navbar extends Component {
   state = { clicked: false, showPopup: false };
@@ -19,7 +19,7 @@ class Navbar extends Component {
   render() {
     return (
       <AuthContext.Consumer>
-        {({ isAuthenticated, logout }) => (
+        {({ isLoggedIn, logout }) => (
           <nav className="NavbarItems">
             <h1 className="navbar-logo">Trippy</h1>
 
@@ -28,20 +28,18 @@ class Navbar extends Component {
             </div>
 
             <ul className={this.state.clicked ? "nav-menu active" : "nav-menu"}>
-              {MenuItems.map((item, index) => {
-                return (
-                  <li key={index}>
-                    <Link className={item.cName} to={item.url}>
-                      <i className={item.icon}></i>
-                      {item.title}
-                    </Link>
-                  </li>
-                );
-              })}
-              {!isAuthenticated ? (
-                <button onClick={this.togglePopup}>Sign In</button>
-              ) : (
+              {MenuItems.map((item, index) => (
+                <li key={index}>
+                  <Link className={item.cName} to={item.url}>
+                    <i className={item.icon}></i>
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+              {isLoggedIn ? (
                 <button onClick={logout}>Log Out</button>
+              ) : (
+                <button onClick={this.togglePopup}>Sign In</button>
               )}
             </ul>
             {this.state.showPopup && (

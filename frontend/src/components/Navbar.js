@@ -23,6 +23,12 @@ class Navbar extends Component {
           <nav className="NavbarItems">
             <h1 className="navbar-logo">Trippy</h1>
 
+            {isLoggedIn ? (
+              <button className="auth-button" onClick={logout}>Log Out</button>
+            ) : (
+              <button className="auth-button" onClick={this.togglePopup}>Sign In</button>
+            )}
+
             <div className="menu-icons" onClick={this.handleClick}>
               <i className={this.state.clicked ? "fas fa-times" : "fas fa-bars"}></i>
             </div>
@@ -36,12 +42,8 @@ class Navbar extends Component {
                   </Link>
                 </li>
               ))}
-              {isLoggedIn ? (
-                <button onClick={logout}>Log Out</button>
-              ) : (
-                <button onClick={this.togglePopup}>Sign In</button>
-              )}
             </ul>
+
             {this.state.showPopup && (
               <div className="modal-overlay">
                 <div className="modal-content">

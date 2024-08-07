@@ -16,7 +16,7 @@ function LoginRegister({ closePopup }) {
     try {
       const res = await axios.post("http://localhost:3001/api/signup", { username, email, password });
       if (res.status === 201) {
-        navigate("/about"); // change to landing page of planning trips
+        navigate("/Checklist"); // change to landing page of planning trips
       }
     } catch (err) {
       console.error(err);

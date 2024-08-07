@@ -16,7 +16,7 @@
 }
 
 .navbar-logo {
-  color: black;
+  color: #7392a6;
   font-size: 2rem;
   cursor: pointer;
 }
@@ -49,6 +49,9 @@
   transition: all 0.2s ease-in-out;
 }
 
+.nav-button {
+  margin-left: auto;
+}
 
 button {
   padding: 0.5rem 1rem;

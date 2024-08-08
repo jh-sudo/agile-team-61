@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-around;
+        }
+        .column {
+            flex: 1;
+            margin: 10px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .column h2 {
+            text-align: center;
+        }
+        .card {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .card h3 {
+            margin-top: 0;
+            cursor: pointer;
+        }
+        .card p {
+            cursor: pointer;
+        }
+        .save-button {
+            display: none;
+            margin-top: 10px;
+            padding: 5px 10px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .edit-title {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .edit-title h1, .edit-title h3 {
+            cursor: pointer;
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+    <div class="edit-title">
+        <h1 contenteditable="true"><%= itineraryTitle %></h1>
+        <h3 contenteditable="true"><%= itineraryPeriod %></h3>
+        <button id="save-title-period" class="save-button">Save</button>
+    </div>
+    <div class="container">
+        <div class="column">
+            <h2>Day 1</h2>
+            <% itinerary.day1.forEach(item => { %>
+            <div class="card" data-id="<%= item.id %>">
+                <h3 contenteditable="true"><%= item.title %></h3>
+                <p contenteditable="true"><%= item.details %></p>
+                <button class="save-button">Save</button>
+            </div>
+            <% }); %>
+            <button class="add-button" data-day="1">+</button>
+        </div>
+        <div class="column">
+            <h2>Day 2</h2>
+            <% itinerary.day2.forEach(item => { %>
+            <div class="card" data-id="<%= item.id %>">
+                <h3 contenteditable="true"><%= item.title %></h3>
+                <p contenteditable="true"><%= item.details %></p>
+                <button class="save-button">Save</button>
+            </div>
+            <% }); %>
+            <button class="add-button" data-day="2">+</button>
+        </div>
+        <div class="column">
+            <h2>Day 3</h2>
+            <% itinerary.day3.forEach(item => { %>
+            <div class="card" data-id="<%= item.id %>">
+                <h3 contenteditable="true"><%= item.title %></h3>
+                <p contenteditable="true"><%= item.details %></p>
+                <button class="save-button">Save</button>
+            </div>
+            <% }); %>
+            <button class="add-button" data-day="3">+</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('save-title-period').addEventListener('click', () => {
+            const title = document.querySelector('.edit-title h1').innerText;
+            const period = document.querySelector('.edit-title h3').innerText;
+
+            fetch('/save-title-period', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, period })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Title and period saved successfully');
+                } else {
+                    alert('Error saving title and period');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error saving title and period');
+            });
+        });
+
+
+        document.querySelectorAll('.card').forEach(card => {
+            const saveButton = card.querySelector('.save-button');
+            card.querySelectorAll('[contenteditable]').forEach(element => {
+                element.addEventListener('input', () => {
+                    saveButton.style.display = 'block';
+                });
+            });
+
+            saveButton.addEventListener('click', () => {
+                saveButton.style.display = 'none';
+                const id = card.getAttribute('data-id');
+                const title = card.querySelector('h3').innerText;
+                const details = card.querySelector('p').innerText;
+
+                fetch('/save-itinerary', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id, title, details })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Itinerary saved successfully');
+                    } else {
+                        alert('Error saving itinerary');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error saving itinerary');
+                });
+            });
+        });
+
+        document.querySelectorAll('.add-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const day = button.getAttribute('data-day');
+                const title = prompt('Enter title:');
+                const details = prompt('Enter details:');
+
+                fetch('/add-itinerary', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ day, title, details })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Error adding itinerary item');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error adding itinerary item');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

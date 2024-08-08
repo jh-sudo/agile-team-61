@@ -1,0 +1,98 @@
+article {
+  --img-scale: 1.001;
+  --title-color: black;
+  position: relative;
+  border-radius: 16px;
+  border-color: #7392a6;
+  box-shadow: none;
+  background: #fff;
+  transform-origin: center;
+  transition: all 0.4s ease-in-out;
+  overflow: hidden;
+}
+
+article h3 {
+  margin: 0 0 18px 0;
+  font-size: 1.4rem;
+  color: var(--title-color);
+  transition: color 0.3s ease-out;
+}
+
+article img {
+  max-width: 100%;
+  transform-origin: center;
+  transform: scale(var(--img-scale));
+  transition: transform 0.4s ease-in-out;
+}
+
+hr {
+  border: none;
+  height: 4px;
+  background-color: #7392a6;
+}
+
+.vaccinationtitle {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.article-body {
+  padding: 24px;
+  justify-content: center;
+}
+
+article:has(:hover, :focus) {
+  --img-scale: 1.1;
+  --title-color: #7392a6;
+  --link-icon-translate: 0;
+  --link-icon-opacity: 1;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.articles {
+  display: grid;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+@media screen and (max-width: 960px) {
+  article {
+    container: card/inline-size;
+  }
+  .article-body p {
+    display: none;
+  }
+}
+
+@container card (min-width: 380px) {
+  .article-wrapper {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 16px;
+  }
+  .article-body {
+    padding-left: 0;
+    overflow: hidden;
+    justify-content: center;
+  }
+}
+
+.card-list-group {
+  list-style-type: none;
+}
+
+.card-list-group-item {
+  padding: 12px;
+}

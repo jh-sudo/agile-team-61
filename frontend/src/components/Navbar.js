@@ -3,7 +3,7 @@ import "./NavbarStyles.css";
 import { MenuItems } from "./MenuItems";
 import { Link } from "react-router-dom";
 import LoginRegister from "./LoginRegister";
-import AuthContext from "../AuthContext";
+import { AuthContext } from '../AuthContext';
 
 class Navbar extends Component {
   state = { clicked: false, showPopup: false };

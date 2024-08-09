@@ -1,12 +1,37 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const login = () => setIsLoggedIn(true);
-  const logout = () => setIsLoggedIn(false);
+  useEffect(() => {
+    // Function to check if the user is logged in by verifying the token
+    const verifyToken = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/api/verifyToken', { withCredentials: true });
+        if (response.status === 200) {
+          setIsLoggedIn(true);
+        }
+      } catch (error) {
+        setIsLoggedIn(false); // If verification fails, consider the user logged out
+        Cookies.remove('authtoken'); // Remove any invalid token from cookies
+      }
+    };
+
+    verifyToken();
+  }, []);
+
+  const login = () => {
+    setIsLoggedIn(true);
+  };
+
+  const logout = () => {
+    setIsLoggedIn(false);
+    Cookies.remove('authtoken'); // Remove the token on logout
+  };
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
@@ -15,4 +40,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export default AuthContext;
+export { AuthContext, AuthProvider };

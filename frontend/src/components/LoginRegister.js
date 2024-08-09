@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import "./LoginRegister.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../AuthContext";
+import {AuthContext} from "../AuthContext"; // Ensure the correct import path
 
 function LoginRegister({ closePopup }) {
   const [username, setUsername] = useState("");
@@ -16,7 +16,7 @@ function LoginRegister({ closePopup }) {
     try {
       const res = await axios.post("http://localhost:3001/api/signup", { username, email, password });
       if (res.status === 201) {
-        navigate("/Checklist"); // change to landing page of planning trips
+        navigate("/Checklist"); // Redirect after successful registration
       }
     } catch (err) {
       console.error(err);
@@ -26,11 +26,11 @@ function LoginRegister({ closePopup }) {
   const signIn = async (event) => {
     event.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3001/api/signin", { email, password });
+      const res = await axios.post("http://localhost:3001/api/signin", { email, password }, { withCredentials: true });
       if (res.status === 200) {
-        login(res.data.token);
+        login();
         closePopup(); // Close the popup after login
-        navigate("/about");
+        navigate("/checklist");
       }
     } catch (err) {
       console.error(err);
@@ -82,7 +82,7 @@ function LoginRegister({ closePopup }) {
                 <input type="password" placeholder="Password" className="form-control form-control-lg bg-light fs-6" onChange={(e) => setPassword(e.target.value)} />
               </div>
               <div className="input-group mb-3 justify-content-center">
-                <button className="btn border-white text-white w-50 fs-6">Sign in</button>
+                <button className="btn border-white text-white w-50 fs-6">Sign In</button>
               </div>
             </form>
           </div>

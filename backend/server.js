@@ -4,13 +4,22 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const port = 3001;
 
-app.use(cors());
+// Set up CORS with specific origin and credentials
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow only this origin
+  credentials: true, // Allow cookies and credentials
+  methods: ['GET', 'POST'], // Allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+}));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 const db = mysql.createConnection({
   host: 'localhost',
@@ -52,6 +61,9 @@ app.post('/api/signup', async (req, res) => {
           console.error('Error inserting user:', err);
           return res.status(500).json({ error: 'Database error' });
         }
+
+        // Add logic to create the default checklist items for the user here
+
         return res.status(201).json({ message: 'User registered successfully' });
       });
     });
@@ -84,12 +96,31 @@ app.post('/api/signin', async (req, res) => {
       }
 
       const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
-      return res.status(200).json({ message: 'Sign in successful', token });
+      
+      // Set the JWT as a cookie
+      res.cookie('authtoken', token, { httpOnly: true, secure: false, sameSite: 'Strict' }); // Adjust 'secure' depending on environment
+      return res.status(200).json({ message: 'Sign in successful' });
     });
   } catch (error) {
     console.error('Error during sign-in:', error);
     return res.status(500).json({ error: 'Server error' });
   }
+});
+
+// Token verification route
+app.get('/api/verifyToken', (req, res) => {
+  const token = req.cookies.authtoken;
+
+  if (!token) {
+    return res.status(401).json({ error: 'Token missing' });
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ error: 'Invalid token' });
+    }
+    return res.status(200).json({ message: 'Token is valid' });
+  });
 });
 
 app.listen(port, () => {

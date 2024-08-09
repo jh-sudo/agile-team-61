@@ -9,11 +9,12 @@ router.get('/dashboard', (req, res) => {
             console.error(err.message);
             res.status(500).send("Internal Server Error");
         } else {
-            const itinerary = { day1: [], day2: [], day3: [] };
+            const itinerary = {};
             rows.forEach(row => {
-                if (row.day === 1) itinerary.day1.push(row);
-                if (row.day === 2) itinerary.day2.push(row);
-                if (row.day === 3) itinerary.day3.push(row);
+                if (!itinerary[`day${row.day}`]) {
+                    itinerary[`day${row.day}`] = [];
+                }
+                itinerary[`day${row.day}`].push(row);
             });
 
             // Fetch title and period
@@ -62,6 +63,34 @@ router.post('/save-title-period', (req, res) => {
         }
     });
 });
+
+// Add new day route
+router.post('/add-day', (req, res) => {
+    const { day } = req.body;
+
+    console.log("Received request to add a new day:", day);
+
+    if (!day) {
+        console.error("Day number is missing");
+        return res.status(400).send("Bad Request: Missing day number");
+    }
+
+    // Insert a placeholder item for the new day
+    const query = 'INSERT INTO itinerary (day, title, details) VALUES (?, ?, ?)';
+    const defaultTitle = `Day ${day} Activity`;
+    const defaultDetails = `Details for Day ${day}`;
+
+    db.run(query, [day, defaultTitle, defaultDetails], (err) => {
+        if (err) {
+            console.error("Error inserting new day:", err.message);
+            res.status(500).send("Internal Server Error");
+        } else {
+            console.log(`New day ${day} added successfully`);
+            res.sendStatus(200);
+        }
+    });
+});
+
 
 // Add itinerary item route
 router.post('/add-itinerary', (req, res) => {

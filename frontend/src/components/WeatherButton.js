@@ -10,8 +10,8 @@ const WeatherButton = () => {
 
   return (
     <div>
-      <button className="open-modal-button" onClick={openModal}>
-        Check for weather <i class="fa-solid fa-cloud-sun"></i>
+      <button className="check-weather-button" onClick={openModal}>
+        Check for weather <i className="fa-solid fa-cloud-sun"></i>
       </button>
       <WeatherModal isOpen={isModalOpen} onClose={closeModal} />
     </div>

@@ -8,15 +8,17 @@ function LoginRegister({ closePopup }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { isLoggedIn, login, logout } = useContext(AuthContext);
+  const {login} = useContext(AuthContext);
   const navigate = useNavigate();
 
   const register = async (event) => {
     event.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3001/api/signup", { username, email, password });
+      const res = await axios.post("http://localhost:3001/api/signup", { username, email, password }, { withCredentials: true });
       if (res.status === 201) {
-        navigate("/Checklist"); // Redirect after successful registration
+        login();
+        closePopup(); // Close the popup after login
+        navigate("/") // Redirect after successful registration
       }
     } catch (err) {
       console.error(err);
@@ -30,27 +32,15 @@ function LoginRegister({ closePopup }) {
       if (res.status === 200) {
         login();
         closePopup(); // Close the popup after login
-        navigate("/checklist");
+        navigate("/");
       }
     } catch (err) {
       console.error(err);
     }
   };
 
-  const signOut = () => {
-    logout();
-    navigate("/");
-  };
-
   return (
     <div className="content justify-content-center align-items-center d-flex shadow-lg" id="content">
-      {isLoggedIn ? (
-        <div className="logged-in">
-          <h1>Welcome back!</h1>
-          <button onClick={signOut} className="btn border-white text-white w-50 fs-6">Sign Out</button>
-        </div>
-      ) : (
-        <>
           <div className="left-box col-md-6 justify-content-center">
             <form onSubmit={register}>
               <div className="header-text mb-4">
@@ -100,8 +90,6 @@ function LoginRegister({ closePopup }) {
               </div>
             </div>
           </div>
-        </>
-      )}
     </div>
   );
 }

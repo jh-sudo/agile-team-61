@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
-
+import ChecklistItems from "../components/checklistItems"
+import Footer from "../components/Footer"
 function Checklist() {
   return (
     <>
@@ -11,7 +12,8 @@ function Checklist() {
         title="Checklist"
         btnClass="hide"
       />
-      
+      <ChecklistItems/>
+      <Footer />
     </>
   );
 }

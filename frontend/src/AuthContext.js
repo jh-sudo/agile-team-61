@@ -17,10 +17,9 @@ const AuthProvider = ({ children }) => {
         }
       } catch (error) {
         setIsLoggedIn(false); // If verification fails, consider the user logged out
-        Cookies.remove('authtoken'); // Remove any invalid token from cookies
+        //Cookies.remove('authtoken'); // Remove any invalid token from cookies
       }
     };
-
     verifyToken();
   }, []);
 
@@ -30,8 +29,8 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setIsLoggedIn(false);
-    Cookies.remove('authtoken'); // Remove the token on logout
   };
+  
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, login, logout }}>

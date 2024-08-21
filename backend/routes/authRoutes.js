@@ -7,6 +7,7 @@ const { generateTokenAndSetCookie } = require('../utils/generateTokenAndSetCooki
 const router = express.Router();
 
 const JWT_SECRET = 'your_jwt_secret_key';
+const JWT_EXPIRATION = '1h'; // Example of token expiration
 
 // Sign up route
 router.post('/signup', async (req, res) => {
@@ -15,23 +16,28 @@ router.post('/signup', async (req, res) => {
     const userExistsQuery = 'SELECT * FROM users WHERE email = ?';
     db.query(userExistsQuery, [email], async (err, results) => {
       if (err) {
-        return res.status(500).json({ error: 'Database error' });
+        return res.status(500).json({ error: 'Database error occurred while checking user existence' });
       }
       if (results.length > 0) {
-        return res.status(409).json({ error: 'User already exists' });
+        return res.status(409).json({ error: 'User already exists with this email' });
       }
+
+      // Add password strength check here if needed
 
       const hashedPassword = await bcrypt.hash(password, 10);
       const insertUserQuery = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
       db.query(insertUserQuery, [username, email, hashedPassword], (err, result) => {
         if (err) {
-          return res.status(500).json({ error: 'Database error' });
+          return res.status(500).json({ error: 'Database error occurred while creating user' });
         }
 
         const userId = result.insertId;
         const newUser = { id: userId, email };
+
+        // Generate token with expiration
         generateTokenAndSetCookie(res, newUser);
 
+        // Insert basic checklist items
         const basicItems = [
           'Passport', 'Visa', 'Tickets for airline',
           'Copies of passport', 'Drivers licence',
@@ -45,14 +51,14 @@ router.post('/signup', async (req, res) => {
         const itemsValues = basicItems.map(item => [userId, item, false]);
         db.query(insertItemsQuery, [itemsValues], (err) => {
           if (err) {
-            return res.status(500).json({ error: 'Database error' });
+            return res.status(500).json({ error: 'Database error occurred while inserting checklist items' });
           }
           return res.status(201).json({ message: 'User registered successfully' });
         });
       });
     });
   } catch (error) {
-    return res.status(500).json({ error: 'Server error' });
+    return res.status(500).json({ error: 'Server error occurred during sign-up' });
   }
 });
 
@@ -63,23 +69,24 @@ router.post('/signin', async (req, res) => {
     const userExistsQuery = 'SELECT * FROM users WHERE email = ?';
     db.query(userExistsQuery, [email], async (err, results) => {
       if (err) {
-        return res.status(500).json({ error: 'Database error' });
+        return res.status(500).json({ error: 'Database error occurred while checking user existence' });
       }
       if (results.length === 0) {
-        return res.status(401).json({ error: 'Invalid credentials' });
+        return res.status(401).json({ error: 'Invalid email or password' });
       }
 
       const user = results[0];
       const isPasswordCorrect = await bcrypt.compare(password, user.password);
       if (!isPasswordCorrect) {
-        return res.status(401).json({ error: 'Invalid credentials' });
+        return res.status(401).json({ error: 'Invalid email or password' });
       }
 
+      // Generate token with expiration
       generateTokenAndSetCookie(res, user);
       return res.status(200).json({ message: 'Sign in successful' });
     });
   } catch (error) {
-    return res.status(500).json({ error: 'Server error' });
+    return res.status(500).json({ error: 'Server error occurred during sign-in' });
   }
 });
 
@@ -103,7 +110,7 @@ router.get('/verifyToken', (req, res) => {
 
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err) {
-      return res.status(401).json({ error: 'Invalid token' });
+      return res.status(401).json({ error: 'Invalid or expired token' });
     }
     return res.status(200).json({ message: 'Token is valid' });
   });

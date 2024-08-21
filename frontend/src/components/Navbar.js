@@ -1,9 +1,9 @@
-import { Component, useContext } from "react";
+import React, { Component } from "react";
 import "./NavbarStyles.css";
 import { MenuItems } from "./MenuItems";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoginRegister from "./LoginRegister";
-import  AuthContext  from "../AuthContext";
+import { AuthContext } from '../AuthContext';
 
 class Navbar extends Component {
   state = { clicked: false, showPopup: false };
@@ -16,34 +16,53 @@ class Navbar extends Component {
     this.setState({ showPopup: !this.state.showPopup });
   };
 
+  handleLogout = async (logout) => {
+    console.log("Log out button clicked");
+    try {
+      const response = await fetch('http://localhost:3001/api/logout', {
+        method: 'POST',
+        credentials: 'include', // Include credentials (cookies) in the request
+      });
+      if (response.ok) {
+        console.log("Logout successful in navbar.js");
+        logout(); // Call the logout function from AuthContext
+        this.props.navigate("/"); // Navigate to the homepage after logout
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("An error occurred during logout:", error);
+    }
+  };
+  
   render() {
     return (
       <AuthContext.Consumer>
-        {({ isAuthenticated, logout }) => (
+        {({ isLoggedIn, logout }) => (
           <nav className="NavbarItems">
             <h1 className="navbar-logo">Trippy</h1>
 
+            {isLoggedIn ? (
+              <button className="auth-button" onClick={() => this.handleLogout(logout)}>
+                Log Out
+              </button>
+            ) : (
+              <button className="auth-button" onClick={this.togglePopup}>Sign In</button>
+            )}
             <div className="menu-icons" onClick={this.handleClick}>
               <i className={this.state.clicked ? "fas fa-times" : "fas fa-bars"}></i>
             </div>
-
             <ul className={this.state.clicked ? "nav-menu active" : "nav-menu"}>
-              {MenuItems.map((item, index) => {
-                return (
-                  <li key={index}>
-                    <Link className={item.cName} to={item.url}>
-                      <i className={item.icon}></i>
-                      {item.title}
-                    </Link>
-                  </li>
-                );
-              })}
-              {!isAuthenticated ? (
-                <button onClick={this.togglePopup}>Sign In</button>
-              ) : (
-                <button onClick={logout}>Log Out</button>
-              )}
+              {MenuItems.map((item, index) => (
+                <li key={index}>
+                  <Link className={item.cName} to={item.url}>
+                    <i className={item.icon}></i>
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
             </ul>
+
             {this.state.showPopup && (
               <div className="modal-overlay">
                 <div className="modal-content">
@@ -59,4 +78,9 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+function NavbarWithNavigate(props) {
+  const navigate = useNavigate();
+  return <Navbar {...props} navigate={navigate} />;
+}
+
+export default NavbarWithNavigate;

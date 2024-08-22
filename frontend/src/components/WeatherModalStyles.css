@@ -55,6 +55,7 @@
     font-weight: bold;
     font-size: 24px;
     margin-top: 5px;
+}
 
 .weather-info {
     display: flex;

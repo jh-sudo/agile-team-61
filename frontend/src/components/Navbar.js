@@ -74,6 +74,7 @@ class Navbar extends Component {
     return (
       <AuthContext.Consumer>
         {({ isLoggedIn, logout }) => (
+            <>
           <nav className="NavbarItems">
             <NavIcon to="#">
                 <FaIcons.FaBars onClick={this.toggleSidebar} />

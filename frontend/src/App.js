@@ -2,7 +2,7 @@ import "./styles.css";
 import "./components/Navbar";
 import Home from "./routes/Home";
 import { Route, Routes } from "react-router-dom";
-import About from "./routes/About";
+import About from "./routes/Checklist";
 import Contact from "./routes/Contact";
 import Service from "./routes/Service";
 import TravelAdvisories from "./routes/TravelAdvisories";
@@ -15,7 +15,7 @@ export default function App() {
       <AuthProvider>
         <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/Checklist" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/service" element={<Service />} />
         <Route path="/TravelAdvisories" element={<TravelAdvisories />} />

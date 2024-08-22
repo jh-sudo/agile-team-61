@@ -1,0 +1,73 @@
+
+  .list-h1 {
+    text-align: center;
+    color: #003366;
+  }
+  
+  .grid-container {
+    display: grid;
+    text-align: left;
+    align-content: center;
+    grid-template-columns: auto auto;
+    gap: 10px;
+    padding: 10px;
+    padding-left: 40vh;
+  }
+  
+  .grid-container > div {
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 30px;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    align-items: center; /* Align checkbox and text vertically */
+    display: flex;
+  }
+  
+  ul li {
+    margin: 8px 0;
+    font-size: 1.1em;
+  }
+  
+  input[type="checkbox"] {
+    margin-right: 10px;
+  }
+  
+  .list-button {
+    white-space: nowrap;
+    border-radius: 0.3rem;
+    font-size: 1rem;
+    font-weight: 600;
+    padding-block: 5px;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+    margin-left: 10px;
+  }
+  
+  button:hover {
+    background-color: #151516;
+    color: #fff;
+  }
+  .clear-selections {
+    text-align: right;
+    margin-right: 20px;
+  }
+  
+  .clear-selections button {
+    background-color: #003366;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .clear-selections button:hover {
+    background-color: #002244;
+    color: white;
+  }
+  

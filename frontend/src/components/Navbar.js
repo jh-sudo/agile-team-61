@@ -6,6 +6,14 @@ import LoginRegister from "./LoginRegister";
 import { AuthContext } from '../AuthContext';
 
 class Navbar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      clicked: false,
+      showPopup: false,
+      sidebar: false,
+    };
+  }
   state = { clicked: false, showPopup: false };
 
   handleClick = () => {
@@ -16,6 +24,19 @@ class Navbar extends Component {
     this.setState({ showPopup: !this.state.showPopup });
   };
 
+  render() {
+    return (
+      <AuthContext.Consumer>
+        {({ isAuthenticated, logout }) => (
+          <>
+            <nav className="NavbarItems">
+              <NavIcon to="#">
+                <FaIcons.FaBars onClick={this.toggleSidebar} />
+              </NavIcon>
+              <a className="navbar-logo" href="/"><h1>Trippy</h1></a>
+
+              <div className="menu-icons" onClick={this.handleClick}>
+                <i className={this.state.clicked ? "fas fa-times" : "fas fa-bars"}></i>
   handleLogout = async (logout) => {
     console.log("Log out button clicked");
     try {
@@ -70,9 +91,37 @@ class Navbar extends Component {
                   <LoginRegister closePopup={this.togglePopup} />
                 </div>
               </div>
-            )}
-          </nav>
-        )}
+
+              <ul className={this.state.clicked ? "nav-menu active" : "nav-menu"}>
+                {/* {MenuItems.map((item, index) => {
+                    return (
+                      <li key={index}>
+                        <Link className={item.cName} to={item.url}>
+                          <i className={item.icon}></i>
+                          {item.title}
+                        </Link>
+                      </li>
+                    );
+                  })} */}
+                {!isAuthenticated ? (
+                  <button onClick={this.togglePopup}>Sign In</button>
+                ) : (
+                  <button onClick={logout}>Log Out</button>
+                )}
+              </ul>
+              {this.state.showPopup && (
+                <div className="modal-overlay">
+                  <div className="modal-content">
+                    <button className="close-btn" onClick={this.togglePopup}>×</button>
+                    <LoginRegister closePopup={this.togglePopup} />
+                  </div>
+                </div>
+              )}
+            </nav>
+            <Sidebar sidebar={this.state.sidebar} toggleSidebar={this.toggleSidebar} />
+          </>
+        )
+        }
       </AuthContext.Consumer>
     );
   }

@@ -16,9 +16,10 @@
 }
 
 .navbar-logo {
-  color: black;
-  font-size: 2rem;
+  color: #7392a6;
+  font-size: 1.3rem;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .nav-menu {

@@ -25,13 +25,11 @@ const Footer = () => {
       </div>
       <div className="bottom">
         <div>
-          <h4>Project</h4>
-          <a href="/">Changelog1</a>
-          <a href="/">Status</a>
-          <a href="/">License</a>
-          <a href="/">All versions</a>
+          <a href="/">About</a>
+          <a href="/">Policy</a>
+          <a href="/">Terms</a>
         </div>
-        <div>
+        {/* <div>
           <h4>Project</h4>
           <a href="/">Changelog2</a>
           <a href="/">Status</a>
@@ -44,13 +42,9 @@ const Footer = () => {
           <a href="/">Status</a>
           <a href="/">License</a>
           <a href="/">All versions</a>
-        </div>
+        </div> */}
         <div>
-          <h4>Project</h4>
-          <a href="/">Changelog4</a>
-          <a href="/">Status</a>
-          <a href="/">License</a>
-          <a href="/">All versions</a>
+          <p>&copy; 2024 SIM Team 61</p>
         </div>
       </div>
     </div>

@@ -9,8 +9,10 @@
     "js-cookie": "^3.0.5",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "6.25.1",
-    "react-scripts": "^5.0.0"
+    "react-icons": "^5.2.1",
+    "react-router-dom": "^6.25.1",
+    "react-scripts": "^5.0.0",
+    "styled-components": "^6.1.12"
   },
   "devDependencies": {
     "@types/react": "18.2.38",

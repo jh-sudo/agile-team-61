@@ -15,7 +15,7 @@ export const SidebarData = [
     },
     {
         title: "Travel Checklist",
-        path: "/",
+        path: "/checklist",
     },
     {
         title: "Past Itineraries",

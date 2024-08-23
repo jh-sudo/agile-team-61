@@ -29,20 +29,6 @@ const Footer = () => {
           <a href="/">Policy</a>
           <a href="/">Terms</a>
         </div>
-        {/* <div>
-          <h4>Project</h4>
-          <a href="/">Changelog2</a>
-          <a href="/">Status</a>
-          <a href="/">License</a>
-          <a href="/">All versions</a>
-        </div>
-        <div>
-          <h4>Project</h4>
-          <a href="/">Changelog3</a>
-          <a href="/">Status</a>
-          <a href="/">License</a>
-          <a href="/">All versions</a>
-        </div> */}
         <div>
           <p>&copy; 2024 SIM Team 61</p>
         </div>

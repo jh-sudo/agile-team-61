@@ -137,9 +137,9 @@ input[type="text"], input[type="email"], input[type="password"] {
 }
 
 .close-btn {
-    position: absolute;
-    top: 160px;
-    right: 360px;
+    position: relative;
+    left: 50%;
+    bottom: -180%;
     background: none;
     border: none;
     font-size: 1.5rem;

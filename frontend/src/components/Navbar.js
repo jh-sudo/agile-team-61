@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./NavbarStyles.css";
-import { MenuItems } from "./MenuItems";
 import { Link, useNavigate } from "react-router-dom";
 import LoginRegister from "./LoginRegister";
 import { AuthContext } from '../AuthContext';
@@ -56,12 +55,12 @@ class Navbar extends Component {
     try {
       const response = await fetch('http://localhost:3001/api/logout', {
         method: 'POST',
-        credentials: 'include', // Include credentials (cookies) in the request
+        credentials: 'include',
       });
       if (response.ok) {
         console.log("Logout successful in navbar.js");
-        logout(); // Call the logout function from AuthContext
-        this.props.navigate("/"); // Navigate to the homepage after logout
+        logout();
+        this.props.navigate("/");
       } else {
         console.error("Logout failed");
       }
@@ -88,26 +87,10 @@ class Navbar extends Component {
             ) : (
               <button className="auth-button" onClick={this.togglePopup}>Sign In</button>
             )}
-            <div className="menu-icons" onClick={this.handleClick}>
-              <i className={this.state.clicked ? "fas fa-times" : "fas fa-bars"}></i>
-            </div>
-            <ul className={this.state.clicked ? "nav-menu active" : "nav-menu"}>
-              {MenuItems.map((item, index) => (
-                <li key={index}>
-                  <Link className={item.cName} to={item.url}>
-                    <i className={item.icon}></i>
-                    {item.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
               {this.state.showPopup && (
                 <div className="modal-overlay">
-                  <div className="modal-content">
                     <button className="close-btn" onClick={this.togglePopup}>×</button>
                     <LoginRegister closePopup={this.togglePopup} />
-                  </div>
                 </div>
               )}
             </nav>

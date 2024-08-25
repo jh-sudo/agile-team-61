@@ -2,10 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const authRoutes = require('./routes/authRoutes');
-const checklistRoutes = require('./routes/checklistRoutes');
 const db = require('./db');  // Import db.js
-
 const app = express();
 
 // Middleware setup
@@ -13,9 +10,21 @@ app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-// Route setup
+//Login route
+const authRoutes = require('./routes/authRoutes');
 app.use('/api', authRoutes);
+
+//Checklist route
+const checklistRoutes = require('./routes/checklistRoutes');
 app.use('/api', checklistRoutes);
+
+//Dashboard route
+const dashboardRoutes = require('./routes/dashboardRoutes');
+app.use('/api', dashboardRoutes);
+
+//Past Itineraries route
+const ViewPastItinerariesRoutes = require('./routes/ViewPastItinerariesRoutes');
+app.use('/api', ViewPastItinerariesRoutes);
 
 // Starting the server
 const PORT = 3001;

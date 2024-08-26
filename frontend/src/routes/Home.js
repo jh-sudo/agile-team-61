@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
+import Destinations from "../components/Destinations";
+import Trip from "../components/Trip";
 import Footer from "../components/Footer";
 
 function Home() {
@@ -16,6 +18,8 @@ function Home() {
         url="/"
         btnClass="show"
       />
+      <Destinations />
+      <Trip />
       <Footer />
     </>
   );

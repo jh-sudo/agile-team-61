@@ -19,7 +19,7 @@ export const SidebarData = [
     },
     {
         title: "Past Itineraries",
-        path: "/PastItinerary",
+        path: "/",
     },
     {
         title: "Export Itineraries",

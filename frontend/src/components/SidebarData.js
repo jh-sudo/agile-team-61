@@ -7,7 +7,7 @@ import * as RiIcons from "react-icons/ri";
 export const SidebarData = [
     {
         title: "Add Itinerary",
-        path: "/Itinerary",
+        path: "/",
     },
     {
         title: "Travel Advisories",

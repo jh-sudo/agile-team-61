@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .column {
+            flex: 1;
+            margin: 10px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-width: 300px;
+        }
+        .column h2 {
+            text-align: center;
+        }
+        .card {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .card h3 {
+            margin-top: 0;
+            cursor: pointer;
+        }
+        .card p {
+            cursor: pointer;
+        }
+        .save-button {
+            display: none;
+            margin-top: 10px;
+            padding: 5px 10px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .edit-title {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .edit-title h1, .edit-title h3 {
+            cursor: pointer;
+            display: inline;
+        }
+        #add-day-button {
+            margin: 20px auto;
+            display: block;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="edit-title">
+        <h1 contenteditable="true"><%= itineraryTitle %></h1>
+        <h3 contenteditable="true"><%= itineraryPeriod %></h3>
+        <button id="save-title-period" class="save-button">Save</button>
+    </div>
+    <button id="add-day-button">+ Add Day</button>
+    <div class="container" id="itinerary-container">
+        <% Object.keys(itinerary).forEach((dayKey, index) => { %>
+        <div class="column" data-day="<%= index + 1 %>">
+            <h2>Day <%= index + 1 %></h2>
+            <% itinerary[dayKey].forEach(item => { %>
+            <div class="card" data-id="<%= item.id %>">
+                <h3 contenteditable="true"><%= item.title %></h3>
+                <p contenteditable="true"><%= item.details %></p>
+                <button class="save-button">Save</button>
+            </div>
+            <% }); %>
+            <button class="add-button" data-day="<%= index + 1 %>">+</button>
+        </div>
+        <% }); %>
+    </div>
+
+    <script>
+        const saveTitlePeriodButton = document.getElementById('save-title-period');
+
+        // Show the save button when itinerary title or period is edited
+        document.querySelectorAll('.edit-title [contenteditable]').forEach(element => {
+            element.addEventListener('input', () => {
+                saveTitlePeriodButton.style.display = 'block';
+            });
+        });
+
+        saveTitlePeriodButton.addEventListener('click', () => {
+            const title = document.querySelector('.edit-title h1').innerText;
+            const period = document.querySelector('.edit-title h3').innerText;
+
+            fetch('/save-title-period', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, period })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Title and period saved successfully');
+                    saveTitlePeriodButton.style.display = 'none'; // Hide the button after saving
+                } else {
+                    alert('Error saving title and period');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error saving title and period');
+            });
+        });
+
+        document.querySelectorAll('.card').forEach(card => {
+            const saveButton = card.querySelector('.save-button');
+            card.querySelectorAll('[contenteditable]').forEach(element => {
+                element.addEventListener('input', () => {
+                    saveButton.style.display = 'block';
+                });
+            });
+
+            saveButton.addEventListener('click', () => {
+                saveButton.style.display = 'none';
+                const id = card.getAttribute('data-id');
+                const title = card.querySelector('h3').innerText;
+                const details = card.querySelector('p').innerText;
+
+                fetch('/save-itinerary', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id, title, details })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Itinerary saved successfully');
+                    } else {
+                        alert('Error saving itinerary');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error saving itinerary');
+                });
+            });
+        });
+
+        document.querySelectorAll('.add-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const day = button.getAttribute('data-day');
+                const title = prompt('Enter title:');
+                const details = prompt('Enter details:');
+
+                fetch('/add-itinerary', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ day, title, details })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Error adding itinerary item');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error adding itinerary item');
+                });
+            });
+        });
+
+        // Add a new day column
+        document.getElementById('add-day-button').addEventListener('click', () => {
+            const dayNumber = document.querySelectorAll('.column').length + 1;
+
+            console.log("Adding new day:", dayNumber); // Debugging output
+
+            fetch('/add-day', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ day: dayNumber })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log("New day added successfully"); // Debugging output
+                    location.reload();
+                } else {
+                    console.error("Error adding day:", response.statusText); // Debugging output
+                    alert('Error adding day');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error adding day');
+            });
+        });
+    </script>
+    
+</body>
+</html>

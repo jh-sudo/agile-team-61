@@ -8,7 +8,6 @@ import Service from "./routes/Service";
 import TravelAdvisories from "./routes/TravelAdvisories";
 import AllAdvisories from "./routes/AllAdvisories";
 import { AuthProvider } from './AuthContext';
-import Itinerary from "./routes/Itinerary";
 
 export default function App() {
   return (
@@ -21,7 +20,6 @@ export default function App() {
         <Route path="/service" element={<Service />} />
         <Route path="/TravelAdvisories" element={<TravelAdvisories />} />
         <Route path="/AllAdvisories" element={<AllAdvisories />} />
-        <Route path="/Itinerary" element={<Itinerary />} />
       </Routes>
       </AuthProvider>
       

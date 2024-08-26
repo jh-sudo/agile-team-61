@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
 const checklistRoutes = require('./routes/checklistRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
 const db = require('./db');  // Import db.js
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(cookieParser());
 // Route setup
 app.use('/api', authRoutes);
 app.use('/api', checklistRoutes);
+app.use('/api', dashboardRoutes);
 
 // Starting the server
 const PORT = 3001;

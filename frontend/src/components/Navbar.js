@@ -7,16 +7,6 @@ import * as FaIcons from "react-icons/fa";
 import styled from "styled-components";
 import Sidebar from "../components/Sidebar";
 
-const Nav = styled.div`
-    background: #ffffff;
-    height: 80px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    position: fixed;
-    z-index: 9999;
-`;
-
 const NavIcon = styled(Link)`
     color: #7392a6;
     margin-right: 2rem;

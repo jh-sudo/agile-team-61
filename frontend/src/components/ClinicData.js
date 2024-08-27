@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { getClinics } from './ClinicAPI';
 import './ClinicStyles.css';
 
 const ClinicData = () => {

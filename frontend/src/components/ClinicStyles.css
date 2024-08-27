@@ -91,8 +91,13 @@ article:has(:hover, :focus) {
 
 .card-list-group {
   list-style-type: none;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  display: block;
 }
 
 .card-list-group-item {
   padding: 12px;
+  display: block;
 }

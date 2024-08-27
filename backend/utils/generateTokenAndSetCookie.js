@@ -12,8 +12,8 @@ function generateTokenAndSetCookie(res, user) {
     // Set the cookie
     res.cookie('authtoken', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Use true if on HTTPS
-        path: '/', // Ensure this matches where you want to use the cookie
+        secure: process.env.NODE_ENV === 'production', 
+        path: '/',
       });
     
     // Log cookies set

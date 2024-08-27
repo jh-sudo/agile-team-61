@@ -22,7 +22,7 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-router.get('/itinerary', (req, res) => {
+router.get('/itinerary/:id', (req, res) => {
   const token = req.cookies.authtoken;
 
   if (!token) {
@@ -67,8 +67,24 @@ router.get('/itinerary', (req, res) => {
   });
 });
 
+// In your backend routes file
+router.get('/itineraries', authenticateToken, (req, res) => {
+  const userId = req.user.id; // Ensure you have user ID from authentication middleware
+
+  // Query to fetch itinerary metadata
+  const query = 'SELECT id, title, period, last_edited FROM itinerary_metadata WHERE user_id = ?';
+
+  db.query(query, [userId], (err, rows) => {
+    if (err) {
+      console.error('Database error:', err); // Log the error for debugging
+      return res.status(500).json({ error: 'Database error occurred while fetching itineraries' });
+    }
+    res.json({ itineraries: rows });
+  });
+});
+
 // Save Itinerary Item
-router.post('/save-itinerary', authenticateToken, (req, res) => {
+router.post('/save-itinerary/:id', authenticateToken, (req, res) => {
   const { id, title, details } = req.body;
   const userId = req.user.id;
 
@@ -82,7 +98,7 @@ router.post('/save-itinerary', authenticateToken, (req, res) => {
 });
 
 // Save Title and Period
-router.post('/save-title-period', authenticateToken, (req, res) => {
+router.post('/save-title-period/:id', authenticateToken, (req, res) => {
   const { title, period } = req.body;
   const userId = req.user.id;
 
@@ -96,24 +112,31 @@ router.post('/save-title-period', authenticateToken, (req, res) => {
 });
 
 // Add New Day
-router.post('/add-day', authenticateToken, (req, res) => {
+router.post('/add-day/:id', authenticateToken, (req, res) => {
   const userId = req.user.id;
+  const itineraryMetadataId = req.params.id; // Use the ID from the URL parameter
   const { day } = req.body;
 
-  const query = 'INSERT INTO itinerary (user_id, day, title, details) VALUES (?, ?, ?, ?)';
+  if (!itineraryMetadataId) {
+    return res.status(400).json({ error: 'Itinerary ID is required' });
+  }
+
+  const query = 'INSERT INTO itinerary (user_id, itinerary_metadata_id, day, title, details) VALUES (?, ?, ?, ?, ?)';
   const defaultTitle = `Day ${day} Activity`;
   const defaultDetails = `Details for Day ${day}`;
 
-  db.query(query, [userId, day, defaultTitle, defaultDetails], (err) => {
+  db.query(query, [userId, itineraryMetadataId, day, defaultTitle, defaultDetails], (err) => {
     if (err) {
+      console.error('Database error:', err); // Log the error for debugging
       return res.status(500).json({ error: 'Database error occurred while adding new day' });
     }
     return res.json({ message: 'New day added successfully' });
   });
 });
 
+
 // Add New Itinerary Item
-router.post('/add-item', authenticateToken, (req, res) => {
+router.post('/add-item/:id', authenticateToken, (req, res) => {
   const { day, title, details } = req.body;
   const userId = req.user.id;
 
@@ -125,5 +148,69 @@ router.post('/add-item', authenticateToken, (req, res) => {
     return res.json({ message: 'Itinerary item added successfully' });
   });
 });
+
+//edit itinerary page routes
+// GET /api/itinerary/:id
+router.get('/itinerary/:id', (req, res) => {
+  const { id } = req.params;
+  
+  // Query to fetch itinerary metadata
+  const itineraryQuery = 'SELECT * FROM itinerary_metadata WHERE id = ?';
+  db.query(itineraryQuery, [id], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: 'Database error occurred while fetching itinerary metadata' });
+    }
+    
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Itinerary not found' });
+    }
+    
+    const itinerary = rows[0];
+    
+    // Query to fetch activities
+    const activitiesQuery = 'SELECT * FROM itinerary_items WHERE itinerary_id = ?';
+    db.query(activitiesQuery, [id], (err, activities) => {
+      if (err) {
+        return res.status(500).json({ error: 'Database error occurred while fetching activities' });
+      }
+      
+      res.json({ itinerary, activities });
+    });
+  });
+});
+
+// PUT /api/itinerary/:id
+router.put('/itinerary/:id', (req, res) => {
+  const { id } = req.params;
+  const { itinerary, activities } = req.body;
+  
+  // Update itinerary metadata
+  const updateItineraryQuery = 'UPDATE itinerary_metadata SET title_of_trip = ?, period = ? WHERE id = ?';
+  db.query(updateItineraryQuery, [itinerary.title_of_trip, itinerary.period, id], (err) => {
+    if (err) {
+      return res.status(500).json({ error: 'Database error occurred while updating itinerary metadata' });
+    }
+    
+    // Update activities
+    const deleteActivitiesQuery = 'DELETE FROM itinerary_items WHERE itinerary_id = ?';
+    db.query(deleteActivitiesQuery, [id], (err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Database error occurred while deleting activities' });
+      }
+      
+      const insertActivitiesQuery = 'INSERT INTO itinerary_items (itinerary_id, title_of_activity, details) VALUES ?';
+      const activityValues = activities.map(a => [id, a.title_of_activity, a.details]);
+      
+      db.query(insertActivitiesQuery, [activityValues], (err) => {
+        if (err) {
+          return res.status(500).json({ error: 'Database error occurred while inserting activities' });
+        }
+        
+        res.status(200).json({ message: 'Itinerary updated successfully' });
+      });
+    });
+  });
+});
+
 
 module.exports = router;

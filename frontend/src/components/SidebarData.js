@@ -6,8 +6,8 @@ import * as RiIcons from "react-icons/ri";
 
 export const SidebarData = [
     {
-        title: "Add Itinerary",
-        path: "/Itinerary",
+        title: "Itineraries",
+        path: "/ItineraryManager",
     },
     {
         title: "Travel Advisories",
@@ -16,10 +16,6 @@ export const SidebarData = [
     {
         title: "Travel Checklist",
         path: "/checklist",
-    },
-    {
-        title: "Past Itineraries",
-        path: "/",
     },
     {
         title: "Export Itineraries",

@@ -22,8 +22,6 @@ router.post('/signup', async (req, res) => {
         return res.status(409).json({ error: 'User already exists with this email' });
       }
 
-      // Add password strength check here if needed
-
       const hashedPassword = await bcrypt.hash(password, 10);
       const insertUserQuery = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
       db.query(insertUserQuery, [username, email, hashedPassword], (err, result) => {

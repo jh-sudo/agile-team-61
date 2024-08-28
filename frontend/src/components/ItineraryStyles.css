@@ -15,6 +15,7 @@
 .column h2 {
     text-align: center;
 }
+
 .card {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
@@ -23,6 +24,8 @@
     margin: 10px 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+
 .card h3 {
     margin-top: 0;
     cursor: pointer;
@@ -31,11 +34,10 @@
     cursor: pointer;
 }
 .save-button {
-    display: none;
     margin-top: 10px;
     padding: 5px 10px;
     border: none;
-    background-color: #4CAF50;
+    background-color: #7392a6;
     color: white;
     border-radius: 3px;
     cursor: pointer;
@@ -48,13 +50,13 @@
     cursor: pointer;
     display: inline;
 }
-#add-day-button {
+.add-day-button {
     margin: 20px auto;
     display: block;
     padding: 10px 20px;
     font-size: 16px;
     border: none;
-    background-color: #4CAF50;
+    background-color: #7392a6;
     color: white;
     border-radius: 3px;
     cursor: pointer;

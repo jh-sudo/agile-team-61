@@ -68,7 +68,7 @@ class Navbar extends Component {
             <NavIcon to="#">
                 <FaIcons.FaBars onClick={this.toggleSidebar} />
               </NavIcon>
-              <a className="navbar-logo" href="/"><h1>Trippy</h1></a>
+              <a className="navbar-logo" href="/"><h1>JourneyZen</h1></a>
   
             {isLoggedIn ? (
               <button className="auth-button" onClick={() => this.handleLogout(logout)}>

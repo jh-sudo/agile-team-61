@@ -191,10 +191,10 @@ const EditItinerary = () => {
         >
           {period}
         </h3>
-        <button onClick={saveTitleAndPeriod}>Save</button>
+        <button className='save-button' onClick={saveTitleAndPeriod}>Save</button>
       </div>
   
-      <button onClick={addNewDay}>+ Add Day</button>
+      <button className='add-day-button' onClick={addNewDay}>+ Add Day</button>
   
       <div className="container">
         {/* Guarding against undefined or null itinerary */}
@@ -219,6 +219,7 @@ const EditItinerary = () => {
                     {item.details}
                   </p>
                   <button
+                    className='save-button'
                     onClick={() =>
                       handleSaveItineraryItem(item.id, index + 1, editableTitle, editableDetails)
                     }
@@ -227,7 +228,7 @@ const EditItinerary = () => {
                   </button>
                 </div>
               ))}
-              <button onClick={() => addNewItem(index + 1)}>+ Add Item</button>
+              <button className='add-day-button' onClick={() => addNewItem(index + 1)}>+ Add Item</button>
             </div>
           ))
         ) : (

@@ -1,4 +1,3 @@
-// editItineraryRoutes.js
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
@@ -92,61 +91,50 @@ router.put('/itinerary/:id', authenticateToken, (req, res) => {
 
 // Save Title and Period
 router.post('/save-title-period/:id', authenticateToken, (req, res) => {
-    console.log('Received itineraryId:', req.params.id);
-    console.log('Received body:', req.body); // Log the request body for inspection
-    const { title, period } = req.body;
+  const { title, period } = req.body;
   const itineraryMetadataId = req.params.id;
   const userId = req.user.id;
 
   if (!title || !period || !itineraryMetadataId) {
     return res.status(400).json({ error: 'Title, period, and itinerary_metadata_id are required' });
   }
-
   const query = 'UPDATE itinerary_metadata SET title = ?, period = ? WHERE id = ? AND user_id = ?';
-
-  // Execute database query
   db.query(query, [title, period, itineraryMetadataId, userId], (err) => {
     if (err) {
       console.error('Database error while saving title and period:', err);
       return res.status(500).json({ error: 'Database error occurred while saving title and period' });
     }
-
-    // Successful save
     return res.json({ message: 'Title and period saved successfully' });
   });
 });
 
 // Save an itinerary item
 router.post('/save-itinerary/:id', authenticateToken, (req, res) => {
-    const { id } = req.params;
-    const { day, title, details } = req.body;
-  
-    // Log received data
-    console.log('Received data:', { id, day, title, details });
-  
-    if (!day || !title || !details) {
-      return res.status(400).json({ error: 'Day, title, and details are required' });
-    }
-  
-    const query = 'UPDATE itinerary SET day = ?, title = ?, details = ? WHERE id = ?';
-    db.query(query, [day, title, details, id], (err, result) => {
-      if (err) {
-        console.error('Database error:', err);
-        return res.status(500).json({ error: 'Database error' });
-      }
-  
-      console.log('Query result:', result);
-      if (result.affectedRows === 0) {
-        return res.status(404).json({ error: 'Itinerary item not found' });
-      }
-  
-      res.json({ message: 'Itinerary item updated successfully' });
-    });
-});
-  
-  
-  
+  const { id } = req.params;
+  const { day, title, details } = req.body;
 
+  // Log received data
+  console.log('Received data:', { id, day, title, details });
+
+  if (!day || !title || !details) {
+    return res.status(400).json({ error: 'Day, title, and details are required' });
+  }
+
+  const query = 'UPDATE itinerary SET day = ?, title = ?, details = ? WHERE id = ?';
+  db.query(query, [day, title, details, id], (err, result) => {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+
+    console.log('Query result:', result);
+      if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Itinerary item not found' });
+    }
+
+    res.json({ message: 'Itinerary item updated successfully' });
+  });
+});
 
 // Add New Itinerary Activity
 router.post('/add-item/:id', authenticateToken, (req, res) => {
@@ -173,7 +161,6 @@ router.post('/add-day/:id', authenticateToken, (req, res) => {
   const userId = req.user.id;
   const itineraryMetadataId = req.params.id;
   const { day } = req.body;
-  
 
   if (!day || !itineraryMetadataId) {
     return res.status(400).json({ error: 'Day and itinerary_metadata_id are required' });

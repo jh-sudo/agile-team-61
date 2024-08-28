@@ -1,4 +1,3 @@
-// itineraryHomeRoutes.js
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
@@ -25,28 +24,27 @@ const authenticateToken = (req, res, next) => {
 
 // Save Title and Period
 router.post('/new-itinerary', authenticateToken, (req, res) => {
-    console.log('Received body:', req.body); // Log the request body for inspection
-    const { title, period } = req.body; // Extract title and period
-    const userId = req.user.id;
+  const { title, period } = req.body;
+  const userId = req.user.id;
 
-    if (!title || !period) {
-        return res.status(400).json({ error: 'Title and period are required' });
+  if (!title || !period) {
+    return res.status(400).json({ error: 'Title and period are required' });
+  }
+
+  const query = 'INSERT INTO itinerary_metadata (title, period, user_id) VALUES (?, ?, ?)';
+
+  // Execute database query
+  db.query(query, [title, period, userId], (err, results) => {
+    if (err) {
+      console.error('Database error while saving title and period:', err);
+      return res.status(500).json({ error: 'Database error occurred while saving title and period' });
     }
-
-    const query = 'INSERT INTO itinerary_metadata (title, period, user_id) VALUES (?, ?, ?)';
-
-    // Execute database query
-    db.query(query, [title, period, userId], (err, results) => {
-        if (err) {
-            console.error('Database error while saving title and period:', err);
-            return res.status(500).json({ error: 'Database error occurred while saving title and period' });
-        }
-
-        // Successful save
-        return res.json({ message: 'Title and period saved successfully', id: results.insertId });
-    });
+    // Successful save
+    return res.json({ message: 'Title and period saved successfully', id: results.insertId });
+  });
 });
 
+// Fetch the itinerary data
 router.get('/itinerary/:id', authenticateToken, (req, res) => {
   const userId = req.user.id;
   const { id } = req.params;
@@ -81,10 +79,10 @@ router.get('/itinerary/:id', authenticateToken, (req, res) => {
   });
 });
 
+// Fetch itinerary metadata to be displayed in itinerary home
 router.get('/itineraries', authenticateToken, (req, res) => {
   const userId = req.user.id;
 
-  // Query to fetch itinerary metadata
   const query = 'SELECT id, title, period, last_edited FROM itinerary_metadata WHERE user_id = ?';
 
   db.query(query, [userId], (err, rows) => {

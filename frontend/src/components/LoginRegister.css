@@ -13,7 +13,7 @@
 }
 
 .content button {
-    background-color: #82257b;
+    background-color: #7392a6;
     color: #fff;
     padding: 10px 20px;
     border: 1px solid transparent;
@@ -27,7 +27,7 @@
 }
 
 .content button:hover {
-    background-color: #6b1f66;
+    background-color: #3f464b;
 }
 
 .error-text {
@@ -39,7 +39,7 @@
   
 
 .heade-text h1, .forgot a {
-    color: #82257b;
+    color: #7392a6;
 }
 
 .right-box, .left-box {
@@ -75,7 +75,7 @@ input[type="text"], input[type="email"], input[type="password"] {
 }
 
 .switch {
-    background-color: #82257b;
+    background-color: #7392a6;
     height: 100%;
     color: #fff;
     position: relative;

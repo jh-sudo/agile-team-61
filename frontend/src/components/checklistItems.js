@@ -10,7 +10,7 @@ const ChecklistPage = () => {
       try {
         const response = await fetch('http://localhost:3001/api/get-checklist-items', {
           method: 'GET',
-          credentials: 'include', // Ensure cookies are sent with the request
+          credentials: 'include',
         });
   
         if (response.ok) {
@@ -35,14 +35,14 @@ const ChecklistPage = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ item: newItem }),
-        credentials: 'include', // Include cookies in the request
+        credentials: 'include',
       });
 
       if (response.ok) {
         const data = await response.json();
         if (data.message === 'Item added to checklist') {
           setChecklistItems(prevItems => [...prevItems, { item: newItem, is_checked: false }]);
-          setNewItem(''); // Clear the input field
+          setNewItem('');
         }
       } else {
         console.error('Failed to add item:', response.status, response.statusText);
@@ -58,7 +58,7 @@ const ChecklistPage = () => {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ item: itemToDelete }),
-        credentials: 'include', // Include cookies in the request
+        credentials: 'include',
       });
 
       if (response.ok) {
@@ -77,7 +77,7 @@ const ChecklistPage = () => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ item: itemToCheck.item, is_checked: !itemToCheck.is_checked }),
-        credentials: 'include', // Include cookies in the request
+        credentials: 'include',
       });
 
       if (response.ok) {

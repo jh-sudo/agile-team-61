@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './ItineraryHomeStyles.css';
 
 const ItineraryManager = () => {
   const [title, setTitle] = useState('');
@@ -20,8 +21,8 @@ const ItineraryManager = () => {
 
       if (response.ok) {
         const data = await response.json();
-        const newItineraryId = data.id; // Assuming the response contains the new itinerary ID
-        navigate(`/itinerary/${newItineraryId}`); // Redirect to the edit page of the new itinerary
+        const newItineraryId = data.id;
+        navigate(`/itinerary/${newItineraryId}`);
       } else {
         const errorData = await response.json();
         console.error('Error details:', errorData);
@@ -61,34 +62,32 @@ const ItineraryManager = () => {
   return (
     <div>
       <h1>Itinerary Manager</h1>
-      <h1>
+      <div className="edit-title">
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Enter itinerary title"
         />
-      </h1>
-      <h3>
         <input
           type="text"
           value={period}
           onChange={(e) => setPeriod(e.target.value)}
           placeholder="Enter period"
         />
-      </h3>
-      <div>
-        <button onClick={saveTitleAndPeriod}>Create New Itinerary</button>
+        <button className='add-day-button' onClick={saveTitleAndPeriod}>Create New Itinerary</button>
       </div>
 
       <h2>Past Itineraries</h2>
-      <div>
+      <div className="container">
         {itineraries.length > 0 ? (
           itineraries.map((itinerary) => (
-            <div key={itinerary.id} onClick={() => handleEditItinerary(itinerary.id)}>
-              <h3>{itinerary.title}</h3>
-              <p>Period: {itinerary.period}</p>
-              <p>Last Edited: {new Date(itinerary.last_edited).toLocaleDateString()}</p>
+            <div  onClick={() => handleEditItinerary(itinerary.id)} className="column" key={itinerary.id}>
+              <h2>{itinerary.title}</h2>
+              <div className="home-card">
+                <p>Period: {itinerary.period}</p>
+                <p>Last Edited: {new Date(itinerary.last_edited).toLocaleDateString()}</p>
+              </div>
             </div>
           ))
         ) : (

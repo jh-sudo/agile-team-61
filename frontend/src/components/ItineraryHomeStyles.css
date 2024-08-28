@@ -1,0 +1,47 @@
+.container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.column {
+    flex: 1;
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    min-width: 300px;
+    text-align: center; /* Center align the text */
+}
+.column h2 {
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.home-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+.home-card:hover {
+    background-color: #7392a6;
+    color: white;
+}
+.edit-title {
+    text-align: center;
+    margin: 20px 0;
+}
+.add-day-button {
+    margin: 20px auto;
+    display: block;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: #7392a6;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+}

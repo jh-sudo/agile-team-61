@@ -8,7 +8,7 @@ const checklistRoutes = require('./routes/checklistRoutes');
 const itineraryHomeRoutes = require('./routes/itineraryHomeRoutes');
 const editItineraryRoutes = require('./routes/editItineraryRoutes');
 
-const db = require('./db');  // Import db.js
+const db = require('./db');
 const app = express();
 
 // Middleware setup

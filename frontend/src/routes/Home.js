@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Destinations from "../components/Destinations";
-import Trip from "../components/Trip";
 import Footer from "../components/Footer";
 
 function Home() {
@@ -15,11 +14,10 @@ function Home() {
         title="Your Journey Your Story"
         text="Choose Your Favourite Destination."
         buttonText="Travel Plan"
-        url="/"
+        url="/ItineraryManager"
         btnClass="show"
       />
-      <Destinations />
-      <Trip />
+      <Destinations /> 
       <Footer />
     </>
   );

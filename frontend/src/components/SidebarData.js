@@ -17,14 +17,14 @@ export const SidebarData = [
         title: "Travel Checklist",
         path: "/checklist",
     },
-    {
-        title: "Export Itineraries",
-        path: "/",
-    },
-    {
-        title: "Invite Friends",
-        path: "/",
-    },
+    // {
+    //     title: "Export Itineraries",
+    //     path: "/",
+    // },
+    // {
+    //     title: "Invite Friends",
+    //     path: "/",
+    // },
     {
         title: "About Us",
         path: "/about-us",

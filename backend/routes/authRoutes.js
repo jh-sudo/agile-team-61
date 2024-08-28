@@ -1,13 +1,12 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const db = require('../db'); // Import db connection
+const db = require('../db');
 const { generateTokenAndSetCookie } = require('../utils/generateTokenAndSetCookie');
 
 const router = express.Router();
 
 const JWT_SECRET = 'your_jwt_secret_key';
-const JWT_EXPIRATION = '1h'; // Example of token expiration
 
 // Sign up route
 router.post('/signup', async (req, res) => {

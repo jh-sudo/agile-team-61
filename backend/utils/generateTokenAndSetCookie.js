@@ -7,7 +7,7 @@ function generateTokenAndSetCookie(res, user) {
     const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
     
     // Log the token
-    console.log('Generated Token:', token);
+    //console.log('Generated Token:', token);
     
     // Set the cookie
     res.cookie('authtoken', token, {
@@ -17,7 +17,7 @@ function generateTokenAndSetCookie(res, user) {
       });
     
     // Log cookies set
-    console.log('Cookies Set:', res.getHeader('Set-Cookie'));
+    //console.log('Cookies Set:', res.getHeader('Set-Cookie'));
   }  
 
 module.exports = { generateTokenAndSetCookie };
